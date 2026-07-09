@@ -339,6 +339,12 @@ def build(include_drafts=False):
     static_out = os.path.join(OUTPUT_DIR, "static")
     shutil.copytree(ASSETS_DIR, static_out)
 
+    # also drop favicon.ico at the site root; some browsers/crawlers request
+    # /favicon.ico directly regardless of the <link> tag in <head>
+    favicon_src = os.path.join(ASSETS_DIR, "favicon.ico")
+    if os.path.isfile(favicon_src):
+        shutil.copy2(favicon_src, os.path.join(OUTPUT_DIR, "favicon.ico"))
+
     # copy your pictures -> public/images  (reference them as images/<file> in Markdown)
     if os.path.isdir(IMAGES_DIR):
         shutil.copytree(IMAGES_DIR, os.path.join(OUTPUT_DIR, "images"))
