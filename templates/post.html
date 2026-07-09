@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} &middot; {{ site.title }}{% endblock %}
+{% block meta %}
+  {% if post.subtitle %}<meta name="description" content="{{ post.subtitle }}">{% endif %}
+{% endblock %}
+{% block content %}
+<article class="article wrap">
+  {% if post.draft %}
+    <div class="draft-banner">This is a <strong>draft</strong> preview (built with <code>--drafts</code>).</div>
+  {% endif %}
+
+  {% if post.show_banner %}
+  <div class="article-banner{% if not post.banner %} banner--default{% endif %}"
+       {% if post.banner %}style="background-image:url('{{ post.banner }}')"{% endif %}>
+    {% if not post.banner %}
+      <span class="banner-glyph">&lt;/&gt;</span>
+      {% if post.tags %}<span class="banner-chip">#{{ post.tags[0] }}</span>{% endif %}
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <header class="article-header">
+    <h1 class="article-title">{{ post.title }}</h1>
+    {% if post.subtitle %}<p class="article-subtitle">{{ post.subtitle }}</p>{% endif %}
+    <div class="article-meta">
+      <img class="avatar" src="images/profile.jpeg" alt="{{ site.author }}">
+      <div>
+        <div class="author">{{ site.author }}</div>
+        <div class="meta-line">
+          {{ post.date | fmt_date }}
+          <span class="dot">&middot;</span>
+          {{ post.reading_time }} min read
+        </div>
+      </div>
+    </div>
+    {% if post.tags %}
+      <div class="tag-row">
+        {% for t in post.tags %}<span class="tag">{{ t }}</span>{% endfor %}
+      </div>
+    {% endif %}
+  </header>
+
+  <div class="prose">
+    {{ post.html | safe }}
+  </div>
+
+  <!-- Claps + reactions (client-side, saved per device) -->
+  <section class="reactions" data-slug="{{ post['slug'] }}">
+    <button class="clap-btn" type="button" aria-label="Clap for this post">
+      <span class="clap-emoji">&#128079;</span>
+      <span class="clap-count">0</span>
+    </button>
+    <div class="react-row">
+      <button class="react-btn" data-key="fire" type="button" title="Fire">&#128293;</button>
+      <button class="react-btn" data-key="bug" type="button" title="Nice bug">&#128027;</button>
+      <button class="react-btn" data-key="pwn" type="button" title="Pwned">&#128128;</button>
+      <button class="react-btn" data-key="respect" type="button" title="Respect">&#129305;</button>
+    </div>
+  </section>
+
+  <!-- Comments (giscus / GitHub Discussions) -->
+  <section class="comments">
+    <h2 class="comments-title">Comments</h2>
+    {% if site.giscus_repo and site.giscus_repo_id %}
+    <script src="https://giscus.app/client.js"
+            data-repo="{{ site.giscus_repo }}"
+            data-repo-id="{{ site.giscus_repo_id }}"
+            data-category="{{ site.giscus_category }}"
+            data-category-id="{{ site.giscus_category_id }}"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="top"
+            data-theme="transparent_dark"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+    </script>
+    {% else %}
+    <div class="comments-off">
+      <p>Comments are powered by GitHub Discussions (giscus). To switch them on, add your
+      giscus settings in <code>build.py</code> and rebuild.</p>
+      <p>In the meantime, reach me on
+      <a href="https://www.linkedin.com/in/danish-ahmed-61927b265/" target="_blank" rel="noopener">LinkedIn</a>.</p>
+    </div>
+    {% endif %}
+  </section>
+
+  <div class="article-footer">
+    <a href="index.html">&larr; Back to all posts</a>
+  </div>
+</article>
+{% endblock %}

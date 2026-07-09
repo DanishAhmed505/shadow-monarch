@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block title %}Portfolio &middot; {{ site.author }}{% endblock %}
+{% block meta %}<meta name="description" content="{{ site.author }}, Red Team Operator, Penetration Tester and Offensive Security Specialist.">{% endblock %}
+{% block content %}
+<div class="wrap portfolio">
+
+  <!-- Header -->
+  <header class="pf-header">
+    <img class="pf-avatar" src="images/profile.jpeg" alt="{{ site.author }}">
+    <div class="pf-head-text">
+      <h1 class="pf-name">{{ site.author }}</h1>
+      <p class="pf-role">Red Team Operator &nbsp;/&nbsp; Penetration Tester &nbsp;/&nbsp; Offensive Security Specialist</p>
+      <p class="pf-location">Pakistan &middot; Open to relocation (Riyadh, KSA) &middot; Immediately available</p>
+      <div class="pf-actions">
+        <a class="btn" href="files/Danish_Ahmed_CV.pdf" download>Download CV (PDF)</a>
+        <a class="btn-outline" href="https://www.linkedin.com/in/danish-ahmed-61927b265/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn-outline" href="index.html">Read the blog</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Stat highlights -->
+  <section class="pf-stats">
+    <div class="stat"><span class="stat-num">#1</span><span class="stat-label">Hack The Box, Pakistan (GURU)</span></div>
+    <div class="stat"><span class="stat-num">NASA</span><span class="stat-label">Hall of Fame</span></div>
+    <div class="stat"><span class="stat-num">Top 5%</span><span class="stat-label">TryHackMe, global</span></div>
+    <div class="stat"><span class="stat-num">Finalist</span><span class="stat-label">Iran Olympic CTF 2025</span></div>
+    <div class="stat"><span class="stat-num">7</span><span class="stat-label">Security certifications</span></div>
+    <div class="stat"><span class="stat-num">50+</span><span class="stat-label">Students mentored</span></div>
+  </section>
+
+  <!-- Summary -->
+  <section class="pf-section">
+    <h2 class="pf-h2">Summary</h2>
+    <p class="pf-lead">
+      Offensive security specialist with 1.5+ years of hands on Red Teaming and Penetration Testing across web
+      applications, networks, Active Directory, and cloud environments. Ranked #1 in Pakistan on Hack The Box
+      (GURU rank, featured in NASA Hall of Fame). Proven ability to simulate real world adversarial attacks,
+      run phishing campaigns, and deliver actionable, client ready security reports.
+    </p>
+  </section>
+
+  <!-- Core competencies -->
+  <section class="pf-section">
+    <h2 class="pf-h2">Core Competencies</h2>
+    <div class="pf-chips">
+      {% for c in [
+        "Web App Penetration Testing", "Network Penetration Testing", "Red Team Operations",
+        "Active Directory Attacks", "Phishing & Social Engineering", "Exploit Development",
+        "Post Exploitation & Lateral Movement", "Security Report Writing", "Bug Bounty Hunting",
+        "CTF Competitions", "Linux & Windows Exploitation", "Cloud & Infrastructure Security"] %}
+      <span class="pf-chip">{{ c }}</span>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section class="pf-section">
+    <h2 class="pf-h2">Experience</h2>
+
+    <div class="pf-item">
+      <div class="pf-item-head">
+        <h3>Red Team Operator <span class="pf-org">&middot; VulnHat (Remote Internship)</span></h3>
+        <span class="pf-date">Dec 2023 to Jun 2024</span>
+      </div>
+      <ul>
+        <li>Executed full red team engagements simulating real world adversarial attacks against client environments.</li>
+        <li>Performed advanced web application testing, identifying OWASP Top 10 issues including SQL injection, XSS, SSRF, and authentication bypasses.</li>
+        <li>Conducted network penetration testing: internal reconnaissance, MITM, and lateral movement across enterprise environments.</li>
+        <li>Developed and executed phishing campaigns and social engineering scenarios to test human layer defenses.</li>
+        <li>Performed Active Directory enumeration, privilege escalation, and Pass the Hash / Kerberoasting attacks.</li>
+        <li>Delivered comprehensive, client ready reports with detailed findings and remediation guidance.</li>
+      </ul>
+    </div>
+
+    <div class="pf-item">
+      <div class="pf-item-head">
+        <h3>Junior Penetration Tester <span class="pf-org">&middot; Freelance</span></h3>
+        <span class="pf-date">2023 to 2024</span>
+      </div>
+      <ul>
+        <li>Conducted security assessments and vulnerability audits on client web applications and infrastructure.</li>
+        <li>Identified and reported critical vulnerabilities with clear remediation guidance that improved client security posture.</li>
+        <li>Produced detailed technical and executive level reports tailored to the audience.</li>
+      </ul>
+    </div>
+
+    <div class="pf-item">
+      <div class="pf-item-head">
+        <h3>President, Cybersecurity Student Society (QCSS) <span class="pf-org">&middot; QUEST University</span></h3>
+        <span class="pf-date">2021 to 2024</span>
+      </div>
+      <ul>
+        <li>Led and organized CTF competitions, penetration testing workshops, and offensive security training.</li>
+        <li>Mentored 50+ students in ethical hacking, red teaming, and industry certifications.</li>
+        <li>Managed industry partnerships, growing community engagement by 20%.</li>
+      </ul>
+    </div>
+
+    <div class="pf-item">
+      <div class="pf-item-head">
+        <h3>Microsoft Learn Student Ambassador <span class="pf-org">&middot; Microsoft</span></h3>
+        <span class="pf-date">2022 to 2024</span>
+      </div>
+      <ul>
+        <li>Delivered hands on cybersecurity sessions covering offensive techniques and Microsoft security tooling.</li>
+        <li>Built and maintained a knowledge sharing community promoting technical upskilling.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Certifications (hexagon badges) -->
+  <section class="pf-section">
+    <h2 class="pf-h2">Certifications</h2>
+    <div class="pf-certs">
+      {% for abbr, name, issuer in [
+        ("CPTS", "Certified Penetration Testing Specialist", "Hack The Box"),
+        ("CRTA", "Certified Red Team Analyst", "CyberWarfare Labs"),
+        ("C3SA", "Certified Cyber Security Analyst", "CyberWarfare Labs"),
+        ("CCEP", "Certified Cyber Exploitation Professional", "Red Team Leaders"),
+        ("CRTOM", "Certified Red Team Operations Manager", "Red Team Leaders"),
+        ("CEH", "Certified Ethical Hacker", "Cisco"),
+        ("JPT", "Junior Penetration Tester", "TryHackMe")] %}
+      <div class="cert">
+        <div class="hexbadge"><div class="hexbadge-in"><span class="hex-abbr">{{ abbr }}</span></div></div>
+        <div class="cert-cap">
+          <span class="cert-name">{{ name }}</span>
+          <span class="cert-issuer">{{ issuer }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section class="pf-section">
+    <h2 class="pf-h2">Technical Skills &amp; Tools</h2>
+    <div class="pf-skills">
+      {% for group, items in [
+        ("Offensive Tools", "Metasploit, Cobalt Strike, Burp Suite, Nmap, Nessus, BloodHound, Impacket, Responder, Mimikatz, SQLmap, Nikto"),
+        ("Red Team", "C2 Frameworks, Lateral Movement, Phishing Campaigns, Adversary Simulation, OPSEC"),
+        ("Web AppSec", "OWASP Top 10, API Testing, Authentication Bypass, SSRF, XXE, IDOR, Business Logic Flaws"),
+        ("Network", "Active Directory Attacks, Kerberoasting, Pass the Hash, MITM, Pivoting, Tunneling"),
+        ("Scripting", "Python, Bash, PowerShell"),
+        ("Platforms", "Linux (Kali, Parrot), Windows Server, AWS")] %}
+      <div class="pf-skill-row"><span class="pf-skill-group">{{ group }}</span><span class="pf-skill-items">{{ items }}</span></div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Education -->
+  <section class="pf-section">
+    <h2 class="pf-h2">Education</h2>
+    <div class="pf-item">
+      <div class="pf-item-head">
+        <h3>B.Sc. Cybersecurity <span class="pf-org">&middot; QUEST University</span></h3>
+        <span class="pf-date">2022 to 2026</span>
+      </div>
+      <p class="pf-edu-spec">Specialization: Penetration Testing &amp; Red Teaming</p>
+      <ul>
+        <li>Final Year Project, <strong>ReconX</strong>: an AI powered automated reconnaissance framework with subdomain takeover detection, CVE integration, and structured PDF/JSON reporting.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="pf-section pf-contact">
+    <h2 class="pf-h2">Get in touch</h2>
+    <p class="pf-lead">Open to Red Team and Penetration Testing roles. Full contact details are in the CV.</p>
+    <div class="pf-actions">
+      <a class="btn" href="files/Danish_Ahmed_CV.pdf" download>Download CV (PDF)</a>
+      <a class="btn-outline" href="https://www.linkedin.com/in/danish-ahmed-61927b265/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </section>
+
+</div>
+{% endblock %}

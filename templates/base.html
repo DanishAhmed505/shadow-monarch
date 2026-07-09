@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ site.title }}{% endblock %}</title>
+  {% block meta %}{% endblock %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="static/style.css?v={{ asset_version }}">
+  <link rel="stylesheet" href="static/pygments.css?v={{ asset_version }}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#128737;</text></svg>">
+</head>
+<body>
+  <canvas id="bg-net" aria-hidden="true"></canvas>
+  <div class="progress-bar" id="progress"></div>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="index.html"><span class="prompt">~/</span>{{ site.title }}<span class="cursor"></span></a>
+      <nav class="nav">
+        <a href="index.html">Posts</a>
+        <a href="portfolio.html">Portfolio</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>&copy; {{ site.year }} {{ site.author }}</span>
+      <span class="dot">&middot;</span>
+      <span>{{ site.title }}</span>
+    </div>
+  </footer>
+  {% block scripts %}{% endblock %}
+  <script src="static/site.js?v={{ asset_version }}"></script>
+</body>
+</html>

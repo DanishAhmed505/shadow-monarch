@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}{{ post['title'] }} &middot; {{ SITE_TITLE }}{% endblock %}
+{% block content %}
+<article class="article wrap">
+  {% if is_admin and not post['published'] %}
+    <div class="draft-banner">
+      This is a <strong>draft</strong> and is not visible to the public.
+      <a href="{{ url_for('edit_post', post_id=post['id']) }}">Edit</a>
+    </div>
+  {% endif %}
+
+  <header class="article-header">
+    <h1 class="article-title">{{ post['title'] }}</h1>
+    {% if post['subtitle'] %}<p class="article-subtitle">{{ post['subtitle'] }}</p>{% endif %}
+    <div class="article-meta">
+      <span class="avatar">{{ AUTHOR[0] | upper }}</span>
+      <div>
+        <div class="author">{{ AUTHOR }}</div>
+        <div class="meta-line">
+          {{ post['created_at'] | fmt_date }}
+          <span class="dot">&middot;</span>
+          {{ reading_time }} min read
+        </div>
+      </div>
+      {% if is_admin %}
+        <a class="btn-small edit-link" href="{{ url_for('edit_post', post_id=post['id']) }}">Edit</a>
+      {% endif %}
+    </div>
+  </header>
+
+  <div class="prose">
+    {{ content_html | safe }}
+  </div>
+
+  <div class="article-footer">
+    <a href="{{ url_for('index') }}">&larr; Back to all posts</a>
+  </div>
+</article>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Not found &middot; {{ SITE_TITLE }}{% endblock %}
+{% block content %}
+<div class="wrap narrow empty">
+  <h1>404</h1>
+  <p class="muted">That page doesn't exist.</p>
+  <a class="btn" href="{{ url_for('index') }}">Go home</a>
+</div>
+{% endblock %}

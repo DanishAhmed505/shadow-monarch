@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div class="wrap">
+    <h1 class="hero-title">{{ SITE_TITLE }}</h1>
+    <p class="hero-tagline">{{ TAGLINE }}</p>
+  </div>
+</section>
+
+<div class="wrap feed">
+  {% if items %}
+    {% for it in items %}
+      {% set p = it.row %}
+      <article class="card">
+        <a class="card-link" href="{{ url_for('post', slug=p['slug']) }}">
+          <h2 class="card-title">{{ p['title'] }}</h2>
+          {% if p['subtitle'] %}<p class="card-subtitle">{{ p['subtitle'] }}</p>{% endif %}
+        </a>
+        <div class="card-meta">
+          <span>{{ AUTHOR }}</span>
+          <span class="dot">&middot;</span>
+          <span>{{ p['created_at'] | fmt_date }}</span>
+          <span class="dot">&middot;</span>
+          <span>{{ it.reading_time }} min read</span>
+          {% if is_admin and not p['published'] %}
+            <span class="badge">draft</span>
+          {% endif %}
+        </div>
+      </article>
+    {% endfor %}
+  {% else %}
+    <div class="empty">
+      <p>No posts yet.</p>
+      {% if is_admin %}
+        <a class="btn" href="{{ url_for('new_post') }}">Write your first article</a>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
