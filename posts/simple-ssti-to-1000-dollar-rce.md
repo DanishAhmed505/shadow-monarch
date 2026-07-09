@@ -2,6 +2,7 @@ Title: How a Simple SSTI Turned Into $1,000 and RCE
 Subtitle: Turning a template placeholder in email settings into remote code execution
 Date: 2025-12-15
 Tags: ssti, rce, bug bounty
+Reward: 1000 USD
 Banner: images/ssti-bug-bounty-email.webp
 
 Hey everyone! What started as routine reconnaissance on a web application turned into a critical find: a **Server Side Template Injection (SSTI)** that I escalated to **Remote Code Execution (RCE)**. The reward? A cool $1,000 wired straight to my PayPal. If you're into bug hunting, this story might give you some inspiration for your next recon session.

@@ -3,6 +3,7 @@
   var input = document.getElementById("search-input");
   var results = document.getElementById("search-results");
   var feed = document.getElementById("post-feed");
+  var featured = document.getElementById("featured-post");
   var filters = document.getElementById("filters");
   if (!dataEl || !input || !results || !feed) return;
 
@@ -79,10 +80,12 @@
       results.hidden = true;
       results.innerHTML = "";
       feed.hidden = false;
+      if (featured) featured.hidden = false;
       return;
     }
 
     feed.hidden = true;
+    if (featured) featured.hidden = true;
     results.hidden = false;
 
     var matches = posts.filter(function (p) {

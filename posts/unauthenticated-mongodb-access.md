@@ -2,6 +2,7 @@ Title: Chaining Leaks to Unauthenticated Database Access: A Collaborative Bug Hu
 Subtitle: How a rejected metrics leak turned into unauthenticated access to a production MongoDB
 Date: 2025-09-24
 Tags: auth bypass, information disclosure, bug bounty
+Reward: 200 EUR
 Banner: images/db-access-200-reward.webp
 
 So... guess what?

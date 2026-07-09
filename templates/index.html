@@ -12,8 +12,69 @@
   </div>
 </section>
 
+<section class="stats-strip">
+  <div class="wrap stats-inner">
+    <a class="stat stat-htb" href="{{ site.htb_profile_url }}" target="_blank" rel="noopener" aria-label="HackTheBox profile">
+      <img class="stat-htb-badge" src="{{ site.htb_badge_url }}" alt="HackTheBox rank badge" loading="lazy">
+    </a>
+    <div class="stat">
+      <span class="stat-num">{{ stats.post_count }}</span>
+      <span class="stat-label">Writeups published</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">{{ stats.category_count }}</span>
+      <span class="stat-label">Vulnerability classes covered</span>
+    </div>
+    <a class="stat" href="portfolio.html">
+      <span class="stat-num">{{ stats.cert_count }}</span>
+      <span class="stat-label">Certifications</span>
+    </a>
+    {% if stats.reward_text %}
+    <div class="stat">
+      <span class="stat-num">{{ stats.reward_text }}</span>
+      <span class="stat-label">Bounties earned</span>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% if featured %}
+<section class="featured wrap" id="featured-post">
+  <div class="featured-label">Latest writeup</div>
+  <article class="card card-featured">
+    {% if featured.show_banner %}
+    <a class="card-banner-link" href="{{ featured.url }}" aria-label="{{ featured.title }}">
+      {% if featured.banner %}
+      <img class="card-banner-img card-banner-img-featured" src="{{ featured.banner }}" alt="{{ featured.title }}" loading="lazy">
+      {% else %}
+      <div class="card-banner banner--default card-banner-featured">
+        <span class="banner-glyph">&lt;/&gt;</span>
+        {% if featured.tags %}<span class="banner-chip">#{{ featured.tags[0] }}</span>{% endif %}
+      </div>
+      {% endif %}
+    </a>
+    {% endif %}
+    <div class="card-body">
+      <a class="card-link" href="{{ featured.url }}">
+        <h2 class="card-title card-title-featured">{{ featured.title }}</h2>
+        {% if featured.subtitle %}<p class="card-subtitle">{{ featured.subtitle }}</p>{% endif %}
+      </a>
+      <div class="card-meta">
+        <span>{{ site.author }}</span>
+        <span class="dot">&middot;</span>
+        <span>{{ featured.date | fmt_date }}</span>
+        <span class="dot">&middot;</span>
+        <span>{{ featured.reading_time }} min read</span>
+        {% if featured.draft %}<span class="badge">draft</span>{% endif %}
+        {% for t in featured.tags %}<span class="tag">{{ t }}</span>{% endfor %}
+      </div>
+    </div>
+  </article>
+</section>
+{% endif %}
+
 <div class="wrap feed">
-  {% if posts %}
+  {% if posts or featured %}
   <div class="search">
     <span class="search-icon">&#8981;</span>
     <input id="search-input" type="search" autocomplete="off" spellcheck="false"
@@ -22,7 +83,7 @@
   </div>
 
   <div class="filters" id="filters" aria-label="Filter by vulnerability">
-    <button class="filter-chip is-active" data-terms="">All <span class="chip-count">{{ posts | length }}</span></button>
+    <button class="filter-chip is-active" data-terms="">All <span class="chip-count">{{ (posts | length) + (1 if featured else 0) }}</span></button>
     {% for f in vuln_filters %}
     <button class="filter-chip{% if f.count == 0 %} is-empty{% endif %}" data-terms="{{ f.terms }}">{{ f.label }}{% if f.count %} <span class="chip-count">{{ f.count }}</span>{% endif %}</button>
     {% endfor %}
@@ -64,7 +125,7 @@
         </div>
       </article>
     {% endfor %}
-  {% else %}
+  {% elif not featured %}
     <div class="empty">
       <p>No posts yet. Add a Markdown file to <code>posts/</code> and run <code>python build.py</code>.</p>
     </div>

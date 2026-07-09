@@ -2,6 +2,7 @@ Title: How I Found a $250 XSS Bug After Losing Hope in Bug Bounty
 Subtitle: Persistence, a settings panel, and a stored XSS that finally paid off
 Date: 2025-10-15
 Tags: xss, bug bounty
+Reward: 250 USD
 Banner: images/xss-250-payment.webp
 
 A few months ago, I was done with bug bounty hunting.

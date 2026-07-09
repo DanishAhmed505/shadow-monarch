@@ -312,6 +312,38 @@ main, .site-footer { position: relative; z-index: 1; }
 .search-empty { color: var(--ink-soft); font-family: var(--mono); padding: 24px 0; }
 mark { background: rgba(51,209,122,0.28); color: var(--ink-strong); border-radius: 3px; padding: 0 2px; }
 
+/* ---- Home stats strip ---- */
+.stats-strip {
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-soft);
+  padding: 22px 0;
+}
+.stats-inner {
+  display: flex; flex-wrap: wrap; gap: 12px;
+}
+.stats-inner .stat {
+  flex: 1 1 140px;
+  text-decoration: none;
+  transition: border-color .12s, transform .12s;
+}
+a.stat:hover { border-color: var(--accent); transform: translateY(-2px); text-decoration: none; }
+.stat-htb { flex: 0 0 auto; padding: 6px 10px; display: grid; place-items: center; }
+.stat-htb-badge { display: block; height: 62px; width: auto; border-radius: 6px; }
+.stats-inner .stat-num { font-size: 1.3rem; }
+
+/* ---- Featured post ---- */
+.featured { padding-top: 34px; }
+.featured-label {
+  font-family: var(--mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--accent); margin-bottom: 12px;
+}
+.featured-label::before { content: "> "; }
+.card-featured { margin-bottom: 0; }
+.card-featured:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 0 0 1px var(--accent-dim), 0 16px 40px rgba(0,0,0,0.5); }
+.card-banner-img-featured { max-height: 420px; }
+.card-banner-featured { height: 220px; }
+.card-title-featured { font-size: 1.9rem; }
+
 /* ---- Feed cards (banner style) ---- */
 .card {
   padding: 0;

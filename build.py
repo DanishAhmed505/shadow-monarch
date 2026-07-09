@@ -81,6 +81,16 @@ SITE = {
 # keeps the domain configured across every deploy. Leave empty to skip.
 CUSTOM_DOMAIN = os.environ.get("BLOG_DOMAIN", "shadowmonarch.com")
 
+# HackTheBox profile, used for the live rank badge on the home page.
+HTB_USER_ID = os.environ.get("BLOG_HTB_USER_ID", "1443864")
+SITE["htb_badge_url"] = f"https://www.hackthebox.com/badge/image/{HTB_USER_ID}"
+SITE["htb_profile_url"] = f"https://app.hackthebox.com/users/{HTB_USER_ID}"
+
+# Kept in sync with the certifications listed on templates/portfolio.html.
+CERT_COUNT = 7
+
+CURRENCY_SYMBOLS = {"USD": "$", "EUR": "€", "GBP": "£", "PKR": "Rs "}
+
 # Vulnerability filter chips shown under the search bar. Each entry is
 # (display label, [terms matched against a post's title/tags/body]). Add or
 # remove rows here to change the filter set.
@@ -223,6 +233,31 @@ def build_vuln_filters(posts):
     return out
 
 
+def build_home_stats(posts, vuln_filters):
+    """Auto-computed stats strip: no numbers are hand-maintained, they all
+    come from post metadata so a new post updates the strip on its own."""
+    live_posts = [p for p in posts if not p["draft"]]
+
+    rewards = {}
+    for p in live_posts:
+        if p["reward_amount"] is not None:
+            rewards[p["reward_currency"]] = rewards.get(p["reward_currency"], 0) + p["reward_amount"]
+    reward_lines = []
+    for cur, total in sorted(rewards.items(), key=lambda kv: -kv[1]):
+        symbol = CURRENCY_SYMBOLS.get(cur, cur + " ")
+        amount = f"{total:,.0f}" if total == int(total) else f"{total:,.2f}"
+        reward_lines.append(f"{symbol}{amount}")
+
+    categories_covered = sum(1 for f in vuln_filters if f["count"] > 0)
+
+    return {
+        "post_count": len(live_posts),
+        "reward_text": " + ".join(reward_lines) if reward_lines else None,
+        "category_count": categories_covered,
+        "cert_count": CERT_COUNT,
+    }
+
+
 # --------------------------------------------------------------------------- #
 # Load posts
 # --------------------------------------------------------------------------- #
@@ -254,6 +289,14 @@ def load_posts(include_drafts=False):
         banner_raw = meta_first(meta, "banner", "").strip()
         show_banner = banner_raw.lower() != "none"   # "Banner: none" hides it entirely
 
+        reward_raw = meta_first(meta, "reward", "").strip()
+        reward_amount, reward_currency = None, None
+        if reward_raw:
+            m = re.match(r"([\d,.]+)\s*([A-Za-z]{3})?", reward_raw)
+            if m:
+                reward_amount = float(m.group(1).replace(",", ""))
+                reward_currency = (m.group(2) or "USD").upper()
+
         posts.append({
             "slug": slugify(meta_first(meta, "slug", stem)),
             "title": title,
@@ -266,6 +309,8 @@ def load_posts(include_drafts=False):
             "html": html,
             "reading_time": reading_time(html),
             "url": slugify(meta_first(meta, "slug", stem)) + ".html",
+            "reward_amount": reward_amount,
+            "reward_currency": reward_currency,
         })
 
     posts.sort(key=lambda p: (p["date"], p["title"]), reverse=True)
@@ -303,10 +348,16 @@ def build(include_drafts=False):
         shutil.copytree(FILES_DIR, os.path.join(OUTPUT_DIR, "files"))
 
     # home / feed
+    # `posts` already respects include_drafts (set by load_posts); the featured
+    # slot and the rest of the feed are just a split of that same list, so a
+    # draft previewed via --drafts still appears (with its draft badge).
+    vuln_filters = build_vuln_filters(posts)
+    featured, rest = (posts[0], posts[1:]) if posts else (None, [])
     index_html = env.get_template("index.html").render(
-        site=SITE, posts=posts,
+        site=SITE, posts=rest, featured=featured,
         search_json=build_search_json(posts),
-        vuln_filters=build_vuln_filters(posts),
+        vuln_filters=vuln_filters,
+        stats=build_home_stats(posts, vuln_filters),
     )
     _write("index.html", index_html)
 
