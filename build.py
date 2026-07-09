@@ -71,10 +71,10 @@ SITE = {
     "year": datetime.now().year,
     # Comments via giscus (GitHub Discussions). Fill these in to turn comments on.
     # Get the values from https://giscus.app after enabling Discussions on your repo.
-    "giscus_repo": os.environ.get("BLOG_GISCUS_REPO", ""),            # e.g. "danish/blog"
-    "giscus_repo_id": os.environ.get("BLOG_GISCUS_REPO_ID", ""),
-    "giscus_category": os.environ.get("BLOG_GISCUS_CATEGORY", "General"),
-    "giscus_category_id": os.environ.get("BLOG_GISCUS_CATEGORY_ID", ""),
+    "giscus_repo": os.environ.get("BLOG_GISCUS_REPO", "DanishAhmed505/shadow-monarch"),
+    "giscus_repo_id": os.environ.get("BLOG_GISCUS_REPO_ID", "R_kgDOTTqREQ"),
+    "giscus_category": os.environ.get("BLOG_GISCUS_CATEGORY", "Announcements"),
+    "giscus_category_id": os.environ.get("BLOG_GISCUS_CATEGORY_ID", "DIC_kwDOTTqREc4DA2p-"),
 }
 
 # Custom domain for GitHub Pages. Writing a CNAME file into the build output
