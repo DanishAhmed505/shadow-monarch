@@ -3,8 +3,13 @@
   "name": "shadow-monarch-reactions",
   "main": "src/index.js",
   "compatibility_date": "2026-07-01",
-  "kv_namespaces": [
-    { "binding": "REACTIONS", "id": "6072e969e9184447869e488ae5d66af8" }
+  "durable_objects": {
+    "bindings": [
+      { "name": "POST_REACTIONS", "class_name": "PostReactions" }
+    ]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["PostReactions"] }
   ],
   "observability": { "enabled": true }
 }

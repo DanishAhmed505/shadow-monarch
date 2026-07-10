@@ -2,9 +2,12 @@
 // GET  /reactions?slug=<post-slug>                -> { clap, fire, bug, pwn, respect }
 // POST /reactions?slug=<post-slug>&type=<field>    -> increments that field, returns the updated object
 //
-// Storage: one KV entry per post slug, holding a small JSON object.
-// No auth needed (public counter), but origin is restricted to the blog's
-// own domains and each field can only be one of the known reaction types.
+// Storage: one Durable Object instance per post slug (strongly consistent,
+// so a click is visible on the very next read, unlike eventually-consistent
+// Workers KV). No auth needed (public counter); origin is restricted to the
+// blog's own domains and each field can only be one of the known types.
+
+import { DurableObject } from "cloudflare:workers";
 
 const ALLOWED_ORIGINS = new Set([
   "https://danishahmed505.github.io",
@@ -15,6 +18,21 @@ const ALLOWED_ORIGINS = new Set([
 const FIELDS = ["clap", "fire", "bug", "pwn", "respect"];
 const MAX_SLUG_LEN = 120;
 const EMPTY = { clap: 0, fire: 0, bug: 0, pwn: 0, respect: 0 };
+
+export class PostReactions extends DurableObject {
+  async getCounts() {
+    const stored = await this.ctx.storage.get("counts");
+    return stored || { ...EMPTY };
+  }
+
+  async increment(type) {
+    if (!FIELDS.includes(type)) throw new Error("invalid reaction type");
+    const counts = (await this.ctx.storage.get("counts")) || { ...EMPTY };
+    counts[type] = (counts[type] || 0) + 1;
+    await this.ctx.storage.put("counts", counts);
+    return counts;
+  }
+}
 
 function corsHeaders(origin) {
   const allow = ALLOWED_ORIGINS.has(origin) ? origin : "";
@@ -50,11 +68,12 @@ export default {
     if (!slug || slug.length > MAX_SLUG_LEN) {
       return json({ error: "missing or invalid slug" }, origin, 400);
     }
-    const key = "post:" + slug;
+
+    const stub = env.POST_REACTIONS.getByName(slug);
 
     if (request.method === "GET") {
-      const stored = await env.REACTIONS.get(key, "json");
-      return json(stored || EMPTY, origin);
+      const counts = await stub.getCounts();
+      return json(counts, origin);
     }
 
     if (request.method === "POST") {
@@ -62,10 +81,8 @@ export default {
       if (!FIELDS.includes(type)) {
         return json({ error: "invalid reaction type" }, origin, 400);
       }
-      const current = (await env.REACTIONS.get(key, "json")) || { ...EMPTY };
-      current[type] = (current[type] || 0) + 1;
-      await env.REACTIONS.put(key, JSON.stringify(current));
-      return json(current, origin);
+      const counts = await stub.increment(type);
+      return json(counts, origin);
     }
 
     return json({ error: "method not allowed" }, origin, 405);
