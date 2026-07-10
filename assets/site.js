@@ -84,14 +84,19 @@
     nums.forEach(function (n) { io.observe(n); });
   })();
 
-  // ---- Claps + reactions (localStorage, per post/device) ----
+  // ---- Claps + reactions (real, shared counts via a Cloudflare Worker) ----
   (function () {
     var box = document.querySelector(".reactions");
     if (!box) return;
-    var KEY = "reactions:" + (box.getAttribute("data-slug") || location.pathname);
-    var state = {};
-    try { state = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) {}
-    function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+    var slug = box.getAttribute("data-slug") || location.pathname;
+    var API = "https://shadow-monarch-reactions.danishahmed2004505.workers.dev/reactions";
+
+    // localStorage here only remembers what THIS browser has already done,
+    // so it can't double-count itself; the numbers shown come from the API.
+    var LKEY = "reacted:" + slug;
+    var local = {};
+    try { local = JSON.parse(localStorage.getItem(LKEY) || "{}"); } catch (e) {}
+    function saveLocal() { try { localStorage.setItem(LKEY, JSON.stringify(local)); } catch (e) {} }
 
     function floatPlus(btn) {
       var s = document.createElement("span");
@@ -101,32 +106,54 @@
     }
     function pop(el) { el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); }
 
-    // clap button (your claps, up to 50)
     var clapBtn = box.querySelector(".clap-btn");
     var clapCount = box.querySelector(".clap-count");
-    var MAX = 50;
-    state.clap = state.clap || 0;
-    clapCount.textContent = state.clap;
-    if (state.clap > 0) clapBtn.classList.add("clapped");
+    var MAX_LOCAL_CLAPS = 50;
+    local.clap = local.clap || 0;
+    if (local.clap > 0) clapBtn.classList.add("clapped");
+
+    var reactBtns = {};
+    box.querySelectorAll(".react-btn").forEach(function (btn) {
+      var key = btn.getAttribute("data-key");
+      reactBtns[key] = btn;
+      if (local[key]) btn.classList.add("active");
+    });
+
+    function render(counts) {
+      clapCount.textContent = counts.clap || 0;
+      Object.keys(reactBtns).forEach(function (key) {
+        var n = counts[key] || 0;
+        var el = reactBtns[key].querySelector(".react-count");
+        if (el) el.textContent = n > 0 ? n : "";
+      });
+    }
+
+    function api(method, type) {
+      var url = API + "?slug=" + encodeURIComponent(slug) + (type ? "&type=" + type : "");
+      return fetch(url, { method: method }).then(function (r) { return r.json(); });
+    }
+
+    api("GET").then(render).catch(function () {});
+
     clapBtn.addEventListener("click", function () {
-      if (state.clap >= MAX) return;
-      state.clap++;
-      clapCount.textContent = state.clap;
+      if (local.clap >= MAX_LOCAL_CLAPS) return;
+      local.clap++;
       clapBtn.classList.add("clapped");
       pop(clapBtn.querySelector(".clap-emoji"));
       floatPlus(clapBtn);
-      save();
+      saveLocal();
+      api("POST", "clap").then(render).catch(function () {});
     });
 
-    // emoji reactions (toggle on/off)
-    box.querySelectorAll(".react-btn").forEach(function (btn) {
-      var key = "r_" + btn.getAttribute("data-key");
-      if (state[key]) btn.classList.add("active");
+    Object.keys(reactBtns).forEach(function (key) {
+      var btn = reactBtns[key];
       btn.addEventListener("click", function () {
-        state[key] = state[key] ? 0 : 1;
-        btn.classList.toggle("active", !!state[key]);
-        if (state[key]) pop(btn);
-        save();
+        if (local[key]) return; // one reaction of each kind per browser
+        local[key] = 1;
+        btn.classList.add("active");
+        pop(btn);
+        saveLocal();
+        api("POST", key).then(render).catch(function () {});
       });
     });
   })();

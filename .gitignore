@@ -12,3 +12,7 @@ flask-version/blog.db
 
 # os
 .DS_Store
+
+# node (wrangler CLI, used only to deploy the claps Worker)
+node_modules/
+.wrangler/

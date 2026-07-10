@@ -537,11 +537,13 @@ a.stat:hover { border-color: var(--accent); transform: translateY(-2px); text-de
   background: var(--panel-2); border: 1px solid var(--line);
   border-radius: 10px; padding: 7px 11px; cursor: pointer;
   filter: grayscale(0.4); opacity: 0.75;
+  display: inline-flex; align-items: center; gap: 5px;
   transition: transform .1s, border-color .12s, filter .12s, opacity .12s, background .12s;
 }
 .react-btn:hover { transform: translateY(-2px); border-color: var(--accent); filter: none; opacity: 1; }
 .react-btn.active { border-color: var(--accent); background: var(--accent-dim); filter: none; opacity: 1; }
 .react-btn.pop { animation: react-pop .35s ease; }
+.react-count { font-family: var(--mono); font-size: 0.72rem; color: var(--ink-soft); }
 
 /* ---- Comments ---- */
 .comments { margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--line-soft); }

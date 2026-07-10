@@ -1,0 +1,10 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "shadow-monarch-reactions",
+  "main": "src/index.js",
+  "compatibility_date": "2026-07-01",
+  "kv_namespaces": [
+    { "binding": "REACTIONS", "id": "6072e969e9184447869e488ae5d66af8" }
+  ],
+  "observability": { "enabled": true }
+}
