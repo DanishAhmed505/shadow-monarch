@@ -130,7 +130,7 @@
 
     function api(method, type) {
       var url = API + "?slug=" + encodeURIComponent(slug) + (type ? "&type=" + type : "");
-      return fetch(url, { method: method }).then(function (r) { return r.json(); });
+      return fetch(url, { method: method, cache: "no-store" }).then(function (r) { return r.json(); });
     }
 
     api("GET").then(render).catch(function () {});

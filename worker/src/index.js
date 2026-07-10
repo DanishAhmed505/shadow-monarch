@@ -47,7 +47,14 @@ function corsHeaders(origin) {
 function json(data, origin, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
-    headers: { "Content-Type": "application/json", ...corsHeaders(origin) },
+    headers: {
+      "Content-Type": "application/json",
+      // never let a browser, proxy, or Cloudflare's own edge cache this;
+      // it's a live counter and must always hit the Durable Object
+      "Cache-Control": "no-store, no-cache, must-revalidate",
+      "CDN-Cache-Control": "no-store",
+      ...corsHeaders(origin),
+    },
   });
 }
 
